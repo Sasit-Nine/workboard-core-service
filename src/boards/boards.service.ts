@@ -92,4 +92,11 @@ export class BoardsService {
       throw new Error('Could not edit board name');
     }
   }
+
+  async getBoardById(boardId: number) {
+    return this.boardsRepository.findOne({
+      where: { id: boardId },
+      relations: ['members', 'columns', 'columns.tasks'],
+    });
+  }
 }
