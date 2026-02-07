@@ -17,16 +17,13 @@ export class Board {
   @Column({ type: 'varchar', length: 255 })
   name: string;
 
-  @Column({ type: 'bigint' })
-  created_by: number;
-
   @CreateDateColumn()
   created_at: Date;
 
-  @OneToMany(() => BoardMember, (member) => member.board)
+  @OneToMany(() => BoardMember, (member) => member.board, { cascade: true })
   members: BoardMember[];
 
-  @OneToMany(() => BoardColumn, (column) => column.board)
+  @OneToMany(() => BoardColumn, (column) => column.board, { cascade: true })
   columns: BoardColumn[];
 
   @OneToMany(() => Task, (task) => task.board)
