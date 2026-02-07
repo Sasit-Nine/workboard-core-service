@@ -198,4 +198,10 @@ export class AppController {
   async getTask(@Param('id') id: string) {
     return this.TasksService.getTaskById(Number(id));
   }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('api/boards/get-all-boards')
+  async getAllBoards(@Req() req: AuthRequest) {
+    return this.BoardsService.getAllBoards(req.user.email);
+  }
 }
