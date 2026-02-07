@@ -1,5 +1,13 @@
 import { BoardsService } from './boards/boards.service';
-import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { AppService } from './app.service';
 import { JwtAuthGuard } from './auth/jwt-auth.guard';
 import { AuthRequest } from './auth/auth-type.type';
@@ -87,11 +95,11 @@ export class AppController {
   @UseGuards(JwtAuthGuard)
   @Post('api/columns/edit-column-position')
   async editColumnPosition(
-    @Body() data: { boardId: number; columnOrder: number },
+    @Body() data: { column_id: number; columnOrder: number },
     @Req() req: AuthRequest,
   ) {
     return this.ColumnsService.editPosition(
-      data.boardId,
+      data.column_id,
       data.columnOrder,
       req.user.email,
     );
@@ -172,10 +180,22 @@ export class AppController {
   ) {
     return this.TasksService.editTaskPosition(
       data.taskId,
-      data.newColumnId,
       data.newPosition,
+      data.newColumnId,
       req.user.email,
       data.boardId,
     );
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('api/boards/get-board/:id')
+  async getBoard(@Req() req: AuthRequest, @Param('id') id: string) {
+    return this.BoardsService.getBoardById(Number(id));
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('api/task/get-task/:id')
+  async getTask(@Param('id') id: string) {
+    return this.TasksService.getTaskById(Number(id));
   }
 }

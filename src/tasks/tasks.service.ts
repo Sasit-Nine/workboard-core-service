@@ -118,6 +118,13 @@ export class TasksService {
     boardId: number,
   ) {
     try {
+      console.log('Editing task position:', {
+        taskId,
+        newPosition,
+        columnId,
+        email,
+        boardId,
+      });
       const checkPermission = await this.boardsService.checkPermission(
         boardId,
         email,
@@ -143,5 +150,12 @@ export class TasksService {
     } catch {
       throw new Error('Could not edit task position');
     }
+  }
+
+  async getTaskById(taskId: number) {
+    return this.tasksRepository.findOne({
+      where: { id: taskId },
+      relations: ['assignTo', 'createdBy', 'column'],
+    });
   }
 }
