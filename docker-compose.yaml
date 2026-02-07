@@ -1,0 +1,17 @@
+version: '3.8'
+services:
+  db-core-workboard:
+    image: mysql:8.0
+    container_name: core-workboard-db
+    environment:
+      MYSQL_DATABASE: workboard-core-db
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: password
+    ports:
+      - "3321:3306"
+    volumes:
+      - db-core-workboard-data:/var/lib/mysql
+
+volumes:
+  db-core-workboard-data:
