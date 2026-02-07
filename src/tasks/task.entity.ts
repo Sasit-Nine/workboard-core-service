@@ -7,6 +7,7 @@ import {
 } from 'typeorm';
 import { Board } from 'src/boards/boards.entity';
 import { BoardColumn } from 'src/columns/column.entity';
+import { BoardMember } from 'src/boards/boards-member.entity';
 
 @Entity('tasks')
 export class Task {
@@ -23,6 +24,12 @@ export class Task {
   })
   column: BoardColumn;
 
+  @ManyToOne(() => BoardMember, (m) => m.createdTasks, { nullable: false })
+  createdBy: BoardMember;
+
+  @ManyToOne(() => BoardMember, (m) => m.assignedTasks, { nullable: true })
+  assignTo?: BoardMember;
+
   @Column({ type: 'varchar', length: 255 })
   title: string;
 
@@ -32,9 +39,7 @@ export class Task {
   @Column({ type: 'int', default: 0 })
   position: number;
 
-  @Column({ type: 'bigint' })
-  created_by: number;
-
   @CreateDateColumn()
   created_at: Date;
+  task: { id: number };
 }

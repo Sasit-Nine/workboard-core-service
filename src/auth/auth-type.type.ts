@@ -3,3 +3,7 @@ export interface JwtPayload {
   displayName: string;
   isActive: boolean;
 }
+
+export type AuthRequest = Request & {
+  user: JwtPayload;
+};
