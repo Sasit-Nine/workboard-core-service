@@ -94,9 +94,24 @@ export class BoardsService {
   }
 
   async getBoardById(boardId: number) {
-    return this.boardsRepository.findOne({
-      where: { id: boardId },
-      relations: ['members', 'columns', 'columns.tasks'],
-    });
+    try {
+      return this.boardsRepository.findOne({
+        where: { id: boardId },
+        relations: ['members', 'columns', 'columns.tasks'],
+      });
+    } catch (error) {
+      throw new Error('Could not get board');
+    }
+  }
+
+  async getAllBoards(email: string) {
+    try {
+      return await this.boardMembersRepository.find({
+        where: { email },
+        relations: ['board'],
+      });
+    } catch {
+      throw new Error('Could not get boards');
+    }
   }
 }
