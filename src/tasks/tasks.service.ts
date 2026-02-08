@@ -113,41 +113,72 @@ export class TasksService {
   async editTaskPosition(
     taskId: number,
     newPosition: number,
-    columnId: number,
+    newColumnId: number,
     email: string,
     boardId: number,
   ) {
     try {
-      console.log('Editing task position:', {
-        taskId,
-        newPosition,
-        columnId,
-        email,
-        boardId,
-      });
       const checkPermission = await this.boardsService.checkPermission(
         boardId,
         email,
       );
+
       if (!checkPermission.isMember) {
         throw new Error('Only board members can edit task positions');
       }
+
       const task = await this.tasksRepository.findOne({
         where: { id: taskId },
+        relations: ['column'],
       });
-      if (!task) {
-        throw new Error('Task not found');
-      }
-      task.position = newPosition;
-      const column = await this.tasksRepository.manager.findOne(BoardColumn, {
-        where: { id: columnId },
+
+      if (!task) throw new Error('Task not found');
+
+      const fromColumnId = task.column.id;
+
+      const newColumn = await this.tasksRepository.manager.findOne(
+        BoardColumn,
+        {
+          where: { id: newColumnId },
+        },
+      );
+
+      if (!newColumn) throw new Error('Column not found');
+
+      const fromTasks = await this.tasksRepository.find({
+        where: { column: { id: fromColumnId } },
+        order: { position: 'ASC' },
       });
-      if (!column) {
-        throw new Error('Column not found');
-      }
-      task.column = column;
-      return await this.tasksRepository.save(task);
-    } catch {
+
+      const fromFiltered = fromTasks.filter((t) => t.id !== taskId);
+
+      fromFiltered.forEach((t, index) => {
+        t.position = index;
+      });
+
+      await this.tasksRepository.save(fromFiltered);
+
+      const toTasks = await this.tasksRepository.find({
+        where: { column: { id: newColumnId } },
+        order: { position: 'ASC' },
+      });
+
+      const insertIndex = Math.max(0, Math.min(newPosition, toTasks.length));
+
+      task.column = newColumn;
+
+      const newList = [...toTasks];
+      newList.splice(insertIndex, 0, task);
+
+      newList.forEach((t, index) => {
+        t.position = index;
+      });
+
+      await this.tasksRepository.save(newList);
+
+      return task;
+    } catch (err) {
+      console.error('editTaskPosition error:', err);
       throw new Error('Could not edit task position');
     }
   }

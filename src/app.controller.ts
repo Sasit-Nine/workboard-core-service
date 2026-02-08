@@ -204,4 +204,36 @@ export class AppController {
   async getAllBoards(@Req() req: AuthRequest) {
     return this.BoardsService.getAllBoards(req.user.email);
   }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('api/boards/add-board-member')
+  async addBoardMember(
+    @Body() data: { boardId: number; memberEmail: string },
+    @Req() req: AuthRequest,
+  ) {
+    return this.BoardsService.addMemberToBoard(
+      data.boardId,
+      data.memberEmail,
+      req.user.email,
+    );
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('api/boards/remove-board-member')
+  async removeBoardMember(
+    @Body() data: { boardId: number; memberEmail: string },
+    @Req() req: AuthRequest,
+  ) {
+    return this.BoardsService.removeMemberFromBoard(
+      data.boardId,
+      data.memberEmail,
+      req.user.email,
+    );
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('api/boards/get-board-members/:boardId')
+  async getBoardMembers(@Param('boardId') boardId: string) {
+    return this.BoardsService.getBoardMembers(Number(boardId));
+  }
 }
