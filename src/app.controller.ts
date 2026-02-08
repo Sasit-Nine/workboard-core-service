@@ -30,13 +30,13 @@ export class AppController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Post('api/boards/create-board')
+  @Post('api/core-service/core-service/boards/create-board')
   async createBoard(@Body() data: { name: string }, @Req() req: AuthRequest) {
     return this.BoardsService.createBoard(data.name, req.user.email);
   }
 
   @UseGuards(JwtAuthGuard)
-  @Post('api/boards/delete-board')
+  @Post('api/core-service/boards/delete-board')
   async deleteBoard(
     @Body() data: { boardId: number },
     @Req() req: AuthRequest,
@@ -45,7 +45,7 @@ export class AppController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Post('api/boards/edit-board')
+  @Post('api/core-service/boards/edit-board')
   async editBoard(
     @Body() data: { boardId: number; name: string },
     @Req() req: AuthRequest,
@@ -58,7 +58,7 @@ export class AppController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Post('api/columns/create-column')
+  @Post('api/core-service/columns/create-column')
   async createColumn(
     @Body() data: { name: string; boardId: number },
     @Req() req: AuthRequest,
@@ -71,7 +71,7 @@ export class AppController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Post('api/columns/delete-column')
+  @Post('api/core-service/columns/delete-column')
   async deleteColumn(
     @Body() data: { columnId: number },
     @Req() req: AuthRequest,
@@ -80,7 +80,7 @@ export class AppController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Post('api/columns/edit-column')
+  @Post('api/core-service/columns/edit-column')
   async editColumn(
     @Body() data: { columnId: number; name: string },
     @Req() req: AuthRequest,
@@ -93,7 +93,7 @@ export class AppController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Post('api/columns/edit-column-position')
+  @Post('api/core-service/columns/edit-column-position')
   async editColumnPosition(
     @Body() data: { column_id: number; columnOrder: number },
     @Req() req: AuthRequest,
@@ -106,7 +106,7 @@ export class AppController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Post('api/task/create-task')
+  @Post('api/core-service/task/create-task')
   async createTask(
     @Body()
     data: {
@@ -131,7 +131,7 @@ export class AppController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Post('api/task/delete-task')
+  @Post('api/core-service/task/delete-task')
   async deleteTask(
     @Body() data: { taskId: number; boardId: number },
     @Req() req: AuthRequest,
@@ -144,7 +144,7 @@ export class AppController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Post('api/task/edit-task')
+  @Post('api/core-service/task/edit-task')
   async editTask(
     @Body()
     data: {
@@ -167,7 +167,7 @@ export class AppController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Post('api/task/edit-task-position')
+  @Post('api/core-service/task/edit-task-position')
   async editTaskPosition(
     @Body()
     data: {
@@ -188,25 +188,25 @@ export class AppController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Get('api/boards/get-board/:id')
+  @Get('api/core-service/boards/get-board/:id')
   async getBoard(@Req() req: AuthRequest, @Param('id') id: string) {
     return this.BoardsService.getBoardById(Number(id));
   }
 
   @UseGuards(JwtAuthGuard)
-  @Get('api/task/get-task/:id')
+  @Get('api/core-service/task/get-task/:id')
   async getTask(@Param('id') id: string) {
     return this.TasksService.getTaskById(Number(id));
   }
 
   @UseGuards(JwtAuthGuard)
-  @Get('api/boards/get-all-boards')
+  @Get('api/core-service/boards/get-all-boards')
   async getAllBoards(@Req() req: AuthRequest) {
     return this.BoardsService.getAllBoards(req.user.email);
   }
 
   @UseGuards(JwtAuthGuard)
-  @Post('api/boards/add-board-member')
+  @Post('api/core-service/boards/add-board-member')
   async addBoardMember(
     @Body() data: { boardId: number; memberEmail: string },
     @Req() req: AuthRequest,
@@ -219,7 +219,7 @@ export class AppController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Post('api/boards/remove-board-member')
+  @Post('api/core-service/boards/remove-board-member')
   async removeBoardMember(
     @Body() data: { boardId: number; memberEmail: string },
     @Req() req: AuthRequest,
@@ -232,7 +232,7 @@ export class AppController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Get('api/boards/get-board-members/:boardId')
+  @Get('api/core-service/boards/get-board-members/:boardId')
   async getBoardMembers(@Param('boardId') boardId: string) {
     return this.BoardsService.getBoardMembers(Number(boardId));
   }
