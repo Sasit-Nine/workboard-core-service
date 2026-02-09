@@ -30,7 +30,7 @@ export class AppController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Post('api/core-service/core-service/boards/create-board')
+  @Post('api/core-service/boards/create-board')
   async createBoard(@Body() data: { name: string }, @Req() req: AuthRequest) {
     return this.BoardsService.createBoard(data.name, req.user.email);
   }
