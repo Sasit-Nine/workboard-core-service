@@ -24,10 +24,16 @@ export class Task {
   })
   column: BoardColumn;
 
-  @ManyToOne(() => BoardMember, (m) => m.createdTasks, { nullable: false })
+  @ManyToOne(() => BoardMember, (m) => m.createdTasks, {
+    nullable: true,
+    onDelete: 'SET NULL',
+  })
   createdBy: BoardMember;
 
-  @ManyToOne(() => BoardMember, (m) => m.assignedTasks, { nullable: true })
+  @ManyToOne(() => BoardMember, (m) => m.assignedTasks, {
+    nullable: true,
+    onDelete: 'SET NULL',
+  })
   assignTo?: BoardMember;
 
   @Column({ type: 'varchar', length: 255 })
